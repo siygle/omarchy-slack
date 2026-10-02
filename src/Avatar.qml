@@ -23,6 +23,9 @@ Item {
   property color fg: Color.foreground
   property color accent: Color.accent
   property string fontFamily: Style.font.family
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
   // "active", "away", or "" for no dot at all. Group conversations get none,
   // because a group is not away.
   property string presence: ""
@@ -61,7 +64,7 @@ Item {
       textFormat: Text.PlainText
       color: Qt.rgba(root.fg.r, root.fg.g, root.fg.b, 0.75)
       font.family: root.fontFamily
-      font.pixelSize: Math.max(Style.font.caption, root.size * 0.42)
+      font.pixelSize: Math.max(root.scaledFont(Style.font.caption), root.size * 0.42)
       font.bold: root.glyph === ""
     }
   }

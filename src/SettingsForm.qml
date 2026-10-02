@@ -307,6 +307,37 @@ Column {
 
   PanelSectionHeader { width: parent.width; text: "Appearance" }
 
+  LabeledField {
+    width: Math.min(Style.space(360), parent.width)
+    label: "Font family"
+    placeholder: Style.font.family + " (theme default)"
+    hint: "Use an installed font family name. Leave empty to follow the Omarchy theme."
+    value: String(root.current("fontFamily", ""))
+    onEdited: function(value) { root.change("fontFamily", value) }
+  }
+
+  NumberField {
+    label: "Font size (%)"
+    from: 75
+    to: 200
+    stepSize: 5
+    value: parseInt(String(root.current("fontScale", 100)), 10) || 100
+    onModified: function(value) {
+      if (value !== parseInt(String(root.current("fontScale", 100)), 10))
+        root.change("fontScale", value)
+    }
+  }
+
+  Text {
+    width: parent.width
+    text: "Scales the theme's caption, message and heading sizes together. 100% follows the theme."
+    textFormat: Text.PlainText
+    wrapMode: Text.WordWrap
+    color: Qt.darker(Color.foreground, 1.5)
+    font.family: Style.font.family
+    font.pixelSize: Style.font.caption
+  }
+
   Dropdown {
     width: Math.min(Style.space(260), parent.width)
     label: "Spacing"
@@ -351,8 +382,10 @@ Column {
     to: 120
     stepSize: 5
     value: parseInt(String(root.current("conversations", 40)), 10) || 40
-    onValueChanged: if (value !== parseInt(String(root.current("conversations", 40)), 10))
-      root.change("conversations", value)
+    onModified: function(value) {
+      if (value !== parseInt(String(root.current("conversations", 40)), 10))
+        root.change("conversations", value)
+    }
   }
 
   Text {
@@ -377,8 +410,10 @@ Column {
     to: 3600
     stepSize: 30
     value: parseInt(String(root.current("refreshIntervalSec", 120)), 10) || 120
-    onValueChanged: if (value !== parseInt(String(root.current("refreshIntervalSec", 120)), 10))
-      root.change("refreshIntervalSec", value)
+    onModified: function(value) {
+      if (value !== parseInt(String(root.current("refreshIntervalSec", 120)), 10))
+        root.change("refreshIntervalSec", value)
+    }
   }
 
   Toggle {

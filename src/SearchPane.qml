@@ -20,6 +20,9 @@ Item {
   property color fg: Color.foreground
   property color accent: Color.accent
   property string fontFamily: Style.font.family
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
   property int cursorIndex: 0
 
   readonly property var rows: service ? service.searchResults : []
@@ -69,7 +72,7 @@ Item {
           textFormat: Text.PlainText
           color: root.fg
           font.family: root.fontFamily
-          font.pixelSize: Style.font.subtitle
+          font.pixelSize: root.scaledFont(Style.font.subtitle)
           font.bold: true
         }
 
@@ -79,6 +82,8 @@ Item {
           placeholderText: "Words, or from:@someone in:#channel"
           foreground: root.fg
           accent: root.accent
+          font.family: root.fontFamily
+          font.pixelSize: root.scaledFont(Style.font.body)
           // On Enter, not as you type. Search is a real query on Slack's side
           // and it is rate-limited to one a minute per token on some plans;
           // firing one per keystroke would spend that on nothing.
@@ -115,7 +120,7 @@ Item {
             wrapMode: Text.WordWrap
             color: Color.urgent
             font.family: root.fontFamily
-            font.pixelSize: Style.font.caption
+            font.pixelSize: root.scaledFont(Style.font.caption)
           }
         }
 
@@ -127,7 +132,7 @@ Item {
           textFormat: Text.PlainText
           color: Qt.darker(root.fg, 1.6)
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
 
         ScrollView {
@@ -170,7 +175,7 @@ Item {
                       textFormat: Text.PlainText
                       color: root.accent
                       font.family: root.fontFamily
-                      font.pixelSize: Style.font.caption
+                      font.pixelSize: root.scaledFont(Style.font.caption)
                       font.bold: true
                     }
 
@@ -179,7 +184,7 @@ Item {
                       textFormat: Text.PlainText
                       color: Qt.darker(root.fg, 1.4)
                       font.family: root.fontFamily
-                      font.pixelSize: Style.font.caption
+                      font.pixelSize: root.scaledFont(Style.font.caption)
                     }
 
                     Text {
@@ -187,7 +192,7 @@ Item {
                       textFormat: Text.PlainText
                       color: Qt.darker(root.fg, 1.6)
                       font.family: root.fontFamily
-                      font.pixelSize: Style.font.caption
+                      font.pixelSize: root.scaledFont(Style.font.caption)
                     }
                   }
 
@@ -200,7 +205,7 @@ Item {
                     elide: Text.ElideRight
                     color: root.fg
                     font.family: root.fontFamily
-                    font.pixelSize: Style.font.bodySmall
+                    font.pixelSize: root.scaledFont(Style.font.bodySmall)
                   }
                 }
 

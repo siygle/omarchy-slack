@@ -19,6 +19,9 @@ Item {
   property color fg: Color.foreground
   property color accent: Color.accent
   property string fontFamily: Style.font.family
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
   property int cursorIndex: 0
 
   readonly property var rows: service ? service.switcherRows : []
@@ -71,7 +74,7 @@ Item {
           textFormat: Text.PlainText
           color: root.fg
           font.family: root.fontFamily
-          font.pixelSize: Style.font.subtitle
+          font.pixelSize: root.scaledFont(Style.font.subtitle)
           font.bold: true
         }
 
@@ -81,6 +84,8 @@ Item {
           placeholderText: "A channel, or somebody's name"
           foreground: root.fg
           accent: root.accent
+          font.family: root.fontFamily
+          font.pixelSize: root.scaledFont(Style.font.body)
           // Looked up as you type, but not on every keystroke: the helper
           // filters lists it has cached, and asking it four times a second to
           // filter the same two thousand rows is four times the work for the
@@ -131,7 +136,7 @@ Item {
             elide: Text.ElideRight
             color: Color.urgent
             font.family: root.fontFamily
-            font.pixelSize: Style.font.caption
+            font.pixelSize: root.scaledFont(Style.font.caption)
           }
         }
 
@@ -158,13 +163,14 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: Style.spacing.md
                 anchors.verticalCenter: parent.verticalCenter
-                size: Math.max(Style.space(18), Style.font.body * 1.4)
+                size: Math.max(Style.space(18), root.scaledFont(Style.font.body) * 1.4)
                 glyph: modelData.channelKind === "channel" ? "#" : ""
                 path: String(modelData.avatar || "")
                 name: String(modelData.title || "")
                 fg: root.fg
                 accent: root.accent
                 fontFamily: root.fontFamily
+                fontScale: root.fontScale
               }
 
               Column {
@@ -183,7 +189,7 @@ Item {
                   elide: Text.ElideRight
                   color: root.fg
                   font.family: root.fontFamily
-                  font.pixelSize: Style.font.body
+                  font.pixelSize: root.scaledFont(Style.font.body)
                   font.bold: modelData.unread === true
                 }
 
@@ -195,7 +201,7 @@ Item {
                   elide: Text.ElideRight
                   color: Qt.darker(root.fg, 1.5)
                   font.family: root.fontFamily
-                  font.pixelSize: Style.font.caption
+                  font.pixelSize: root.scaledFont(Style.font.caption)
                 }
               }
 
@@ -210,7 +216,7 @@ Item {
                 textFormat: Text.PlainText
                 color: root.accent
                 font.family: root.fontFamily
-                font.pixelSize: Style.font.caption
+                font.pixelSize: root.scaledFont(Style.font.caption)
               }
 
               MouseArea {
@@ -231,7 +237,7 @@ Item {
           textFormat: Text.PlainText
           color: Qt.darker(root.fg, 1.8)
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
 
         Text {
@@ -240,7 +246,7 @@ Item {
           textFormat: Text.PlainText
           color: Qt.darker(root.fg, 1.8)
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
       }
     }

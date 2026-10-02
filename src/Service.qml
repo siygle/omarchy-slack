@@ -49,6 +49,12 @@ Item {
   readonly property string density: String(setting("density", "cosy"))
   readonly property real densityScale: Model.densityScale(density)
 
+  // Type keeps the theme's hierarchy: the setting chooses a family and scales
+  // captions, body copy and headings together rather than flattening them to
+  // one pixel size. An empty family continues to follow the active theme.
+  readonly property string fontFamily: String(setting("fontFamily", "")).trim()
+  readonly property real fontScale: intSetting("fontScale", 100, 75, 200) / 100.0
+
   function pad(px) { return Math.max(1, Math.round(px * densityScale)) }
 
   // A workspace name is all it takes. Unlike Teams there is no client id to

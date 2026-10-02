@@ -40,8 +40,13 @@ Panel {
 
   readonly property color fg: root.bar ? root.bar.foreground : Color.foreground
   readonly property color accent: root.bar ? root.bar.urgent : Color.urgent
-  readonly property string fontFamily: root.bar ? root.bar.fontFamily : Style.font.family
+  readonly property string themeFontFamily: root.bar ? root.bar.fontFamily : Style.font.family
+  readonly property string fontFamily: service && service.fontFamily !== ""
+                                       ? service.fontFamily : themeFontFamily
+  readonly property real fontScale: service ? service.fontScale : 1.0
   readonly property color dim: Qt.darker(fg, 1.5)
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
 
   // Rows come from the Service already filtered to what is unread, so this
   // draws the same list the window's unread toggle draws. The empty state is
@@ -203,7 +208,7 @@ Panel {
               elide: Text.ElideRight
               color: root.fg
               font.family: root.fontFamily
-              font.pixelSize: Style.font.title
+              font.pixelSize: root.scaledFont(Style.font.title)
               font.bold: true
             }
 
@@ -231,7 +236,7 @@ Panel {
               elide: Text.ElideRight
               color: root.dim
               font.family: root.fontFamily
-              font.pixelSize: Style.font.caption
+              font.pixelSize: root.scaledFont(Style.font.caption)
             }
           }
 
@@ -304,6 +309,7 @@ Panel {
               dim: root.dim
               accent: root.accent
               fontFamily: root.fontFamily
+              fontScale: root.fontScale
               palette: root.service ? root.service.themeColors : ({})
               // The bar's Service asks for no faces - see `wantsDecoration` in
               // BarWidget.qml - so a row here has no avatar to draw, and a
@@ -330,7 +336,7 @@ Panel {
           wrapMode: Text.WordWrap
           color: root.dim
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
 
         // Signing in, and anything the workspace is complaining about. Both go
@@ -346,7 +352,7 @@ Panel {
           wrapMode: Text.WordWrap
           color: root.dim
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
 
         Repeater {
@@ -360,7 +366,7 @@ Panel {
             wrapMode: Text.WordWrap
             color: root.accent
             font.family: root.fontFamily
-            font.pixelSize: Style.font.caption
+            font.pixelSize: root.scaledFont(Style.font.caption)
           }
         }
 
@@ -380,7 +386,7 @@ Panel {
           elide: Text.ElideRight
           color: root.armingMarkAll ? root.accent : Qt.darker(root.fg, 1.8)
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
       }
     }

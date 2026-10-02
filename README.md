@@ -498,6 +498,8 @@ is the line that writes it into the registry — so the plugin brings its own.
 | `conversations` | `40` | How many conversations may be asked how much of them you have read, per poll (5–120). The previews cost one search for the whole workspace, so this is only about the unread marks. |
 | `sort` | `recent` | `recent` puts whatever spoke last at the top of each section; `name` is alphabetical. |
 | `density` | `cosy` | How much room the window gives things: `compact`, `cosy`, `roomy`, `spacious`. A multiplier over the theme's own spacing, so it follows your font size. |
+| `fontFamily` | — | Font used in the window and unread dropdown. Empty follows the Omarchy theme. |
+| `fontScale` | `100` | Font size as a percentage of the theme (75–200), preserving its caption/body/heading hierarchy. |
 | `avatars` | `true` | Faces, fetched by the helper and cached on disk. |
 | `presence` | `true` | A dot on each DM saying whether they are around. One request per person in view. |
 | `refreshIntervalSec` | `120` | How often to poll (30–3600). |

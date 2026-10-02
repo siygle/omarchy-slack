@@ -12,6 +12,9 @@ Column {
   property color fg: Color.foreground
   property color dim: Qt.darker(fg, 1.5)
   property string fontFamily: Style.font.family
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
   // The a key is only there when the handover setting is on, so the list must
   // not promise it either.
   property bool agentHandover: true
@@ -56,7 +59,7 @@ Column {
     textFormat: Text.PlainText
     color: root.fg
     font.family: root.fontFamily
-    font.pixelSize: Style.font.subtitle
+    font.pixelSize: root.scaledFont(Style.font.subtitle)
     font.bold: true
   }
 
@@ -85,7 +88,7 @@ Column {
             horizontalAlignment: Text.AlignRight
             color: Color.accent
             font.family: root.fontFamily
-            font.pixelSize: Style.font.caption
+            font.pixelSize: root.scaledFont(Style.font.caption)
           }
 
           Text {
@@ -93,7 +96,7 @@ Column {
             textFormat: Text.PlainText
             color: root.dim
             font.family: root.fontFamily
-            font.pixelSize: Style.font.caption
+            font.pixelSize: root.scaledFont(Style.font.caption)
           }
         }
       }
@@ -105,6 +108,6 @@ Column {
     textFormat: Text.PlainText
     color: Qt.darker(root.fg, 1.8)
     font.family: root.fontFamily
-    font.pixelSize: Style.font.caption
+    font.pixelSize: root.scaledFont(Style.font.caption)
   }
 }

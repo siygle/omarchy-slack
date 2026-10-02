@@ -23,6 +23,10 @@ Item {
   property int intrinsicHeight: 0
   property string account: ""
   property string pluginDir: ""
+  property string fontFamily: Style.font.family
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
   // Asked for, not acted on: the whole picture is a layer of the window, and
   // the thumbnail has no business knowing how the window draws it.
   signal openRequested(string path, string alt)
@@ -131,8 +135,8 @@ Item {
       horizontalAlignment: Text.AlignHCenter
       wrapMode: Text.WordWrap
       color: Qt.darker(Color.foreground, 1.4)
-      font.family: Style.font.family
-      font.pixelSize: Style.font.caption
+      font.family: root.fontFamily
+      font.pixelSize: root.scaledFont(Style.font.caption)
     }
 
     MouseArea {

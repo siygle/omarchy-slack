@@ -15,6 +15,9 @@ Column {
   property color dim: Qt.darker(fg, 1.5)
   property color accent: Color.accent
   property string fontFamily: Style.font.family
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
   property int cursorIndex: -1
   // How generously to space the rows. 1.0 is the theme's own spacing.
   property real density: 1.0
@@ -30,7 +33,7 @@ Column {
   readonly property int rowPadding: Math.max(1, Math.round(Style.spacing.md * density))
   // Not scaled: a wider left margin on every row just narrows the names.
   readonly property int rowIndent: Style.spacing.md
-  readonly property int faceSize: Math.max(Style.space(20), Style.font.body * 1.7)
+  readonly property int faceSize: Math.max(Style.space(20), root.scaledFont(Style.font.body) * 1.7)
 
   // The column the unread bar stands in, to the left of every row. The pane
   // holding this list hands it this much of its own left padding, so that the
@@ -134,6 +137,7 @@ Column {
         fg: root.fg
         accent: root.accent
         fontFamily: root.fontFamily
+        fontScale: root.fontScale
       }
 
       Column {
@@ -181,7 +185,7 @@ Column {
             textFormat: Text.PlainText
             color: root.dim
             font.family: root.fontFamily
-            font.pixelSize: Style.font.caption
+            font.pixelSize: root.scaledFont(Style.font.caption)
           }
 
           Text {
@@ -194,7 +198,7 @@ Column {
             elide: Text.ElideRight
             color: (line.inert || line.isMore) ? root.dim : root.fg
             font.family: root.fontFamily
-            font.pixelSize: line.isHeading ? Style.font.caption : Style.font.body
+            font.pixelSize: line.isHeading ? root.scaledFont(Style.font.caption) : root.scaledFont(Style.font.body)
             font.bold: line.isHeading || line.modelData.unread === true || line.selected
             font.capitalization: line.isHeading ? Font.AllUppercase : Font.MixedCase
             font.italic: line.isNote
@@ -219,7 +223,7 @@ Column {
               textFormat: Text.PlainText
               color: root.accent
               font.family: root.fontFamily
-              font.pixelSize: Style.font.caption
+              font.pixelSize: root.scaledFont(Style.font.caption)
               font.bold: true
             }
           }
@@ -234,7 +238,7 @@ Column {
           maximumLineCount: 1
           color: root.dim
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
       }
 
@@ -251,7 +255,7 @@ Column {
         textFormat: Text.PlainText
         color: root.dim
         font.family: root.fontFamily
-        font.pixelSize: Style.font.body
+        font.pixelSize: root.scaledFont(Style.font.body)
       }
 
       Text {
@@ -265,7 +269,7 @@ Column {
         textFormat: Text.PlainText
         color: root.dim
         font.family: root.fontFamily
-        font.pixelSize: Style.font.caption
+        font.pixelSize: root.scaledFont(Style.font.caption)
       }
 
       MouseArea {

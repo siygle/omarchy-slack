@@ -14,6 +14,9 @@ Column {
   property int rows: 7
   property color fg: Color.foreground
   property int period: 1400
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
 
   spacing: Style.spacing.md
 
@@ -46,14 +49,14 @@ Column {
 
       Rectangle {
         width: parent.width * parent.titleWidth
-        height: Style.font.body
+        height: root.scaledFont(Style.font.body)
         radius: Style.space(3)
         color: root.wash(0.16)
       }
 
       Rectangle {
         width: parent.width * parent.bodyWidth
-        height: Style.font.caption
+        height: root.scaledFont(Style.font.caption)
         radius: Style.space(3)
         color: root.wash(0.09)
       }

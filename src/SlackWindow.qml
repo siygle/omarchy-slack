@@ -19,6 +19,13 @@ Item {
   id: root
 
   readonly property string pluginId: "janrenz.omarchy.slack"
+  readonly property string contentFontFamily: service.fontFamily !== ""
+                                              ? service.fontFamily : Style.font.family
+  readonly property real contentFontScale: service.fontScale
+
+  function contentFontSize(themeSize) {
+    return Math.max(1, Math.round(themeSize * contentFontScale))
+  }
 
   // ---- host injections ----------------------------------------------------
   property var shell: null
@@ -530,7 +537,7 @@ Item {
   // the two you had just summoned. The app's own glyph, in the app's own
   // colour, where a title bar would carry its icon, says it at a glance.
   readonly property color brandColor: "#36C5F0"
-  readonly property int markSize: Math.round(Style.font.heading + Style.spacing.md * 2)
+  readonly property int markSize: Math.round(root.contentFontSize(Style.font.heading) + Style.spacing.md * 2)
 
   // The list's marker column - the unread bar. It comes out of the panel's
   // left padding rather than out of the rows, so CHANNELS, every name and the
@@ -854,8 +861,8 @@ Item {
                      ? String(service.openConversation.title || "") : ""))
             textFormat: Text.PlainText
             color: parent.tint
-            font.family: Style.font.family
-            font.pixelSize: Style.font.body
+            font.family: root.contentFontFamily
+            font.pixelSize: root.contentFontSize(Style.font.body)
           }
         }
       }
@@ -957,7 +964,8 @@ Item {
                 selectedKey: service.openConversation ? String(service.openConversation.key) : ""
                 fg: Color.foreground
                 accent: Color.accent
-                fontFamily: Style.font.family
+                fontFamily: root.contentFontFamily
+                fontScale: root.contentFontScale
                 onPicked: function(row) { root.pickListRow(row) }
               }
             }
@@ -979,7 +987,8 @@ Item {
           alt: root.viewingImageAlt
           fg: Color.foreground
           accent: Color.accent
-          fontFamily: Style.font.family
+          fontFamily: root.contentFontFamily
+          fontScale: root.contentFontScale
           onCloseRequested: root.closeImage()
         }
       }
@@ -999,7 +1008,8 @@ Item {
           KeyHelp {
             anchors.centerIn: parent
             fg: Color.foreground
-            fontFamily: Style.font.family
+            fontFamily: root.contentFontFamily
+            fontScale: root.contentFontScale
             agentHandover: service.agentHandover
           }
         }
@@ -1025,7 +1035,8 @@ Item {
           service: root.slackService
           fg: Color.foreground
           accent: Color.accent
-          fontFamily: Style.font.family
+          fontFamily: root.contentFontFamily
+          fontScale: root.contentFontScale
           onClosed: root.closeSwitcher()
         }
       }
@@ -1041,7 +1052,8 @@ Item {
           service: root.slackService
           fg: Color.foreground
           accent: Color.accent
-          fontFamily: Style.font.family
+          fontFamily: root.contentFontFamily
+          fontScale: root.contentFontScale
           onClosed: root.closeSearch()
         }
       }
@@ -1156,8 +1168,8 @@ Item {
                 anchors.fill: parent
                 text: "\u{F04B1}"   // nf-md-slack
                 color: root.brandColor
-                fontFamily: Style.font.family
-                fontSize: Style.font.iconLarge
+                fontFamily: root.contentFontFamily
+                fontSize: root.contentFontSize(Style.font.iconLarge)
               }
             }
 
@@ -1192,8 +1204,8 @@ Item {
                   textFormat: Text.PlainText
                   elide: Text.ElideRight
                   color: Color.foreground
-                  font.family: Style.font.family
-                  font.pixelSize: Style.font.heading
+                  font.family: root.contentFontFamily
+                  font.pixelSize: root.contentFontSize(Style.font.heading)
                 }
 
                 // Grouped so their combined width can be measured and taken
@@ -1220,8 +1232,8 @@ Item {
                     text: "reading your conversations…"
                     textFormat: Text.PlainText
                     color: Qt.darker(Color.foreground, 1.5)
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.caption
+                    font.family: root.contentFontFamily
+                    font.pixelSize: root.contentFontSize(Style.font.caption)
                   }
                 }
               }
@@ -1246,8 +1258,8 @@ Item {
                 textFormat: Text.PlainText
                 elide: Text.ElideRight
                 color: Qt.darker(Color.foreground, 1.5)
-                font.family: Style.font.family
-                font.pixelSize: Style.font.caption
+                font.family: root.contentFontFamily
+                font.pixelSize: root.contentFontSize(Style.font.caption)
               }
             }
 
@@ -1266,8 +1278,8 @@ Item {
                 text: "Conversations"
                 bordered: true
                 foreground: Color.foreground
-                fontFamily: Style.font.family
-                fontSize: Style.font.caption
+                fontFamily: root.contentFontFamily
+                fontSize: root.contentFontSize(Style.font.caption)
                 onClicked: root.toggleListDrawer()
               }
 
@@ -1285,8 +1297,8 @@ Item {
                 selected: service.canvasOpen
                 bordered: true
                 foreground: service.canvasOpen ? Color.accent : Color.foreground
-                fontFamily: Style.font.family
-                fontSize: Style.font.caption
+                fontFamily: root.contentFontFamily
+                fontSize: root.contentFontSize(Style.font.caption)
                 onClicked: service.toggleCanvas()
               }
 
@@ -1296,8 +1308,8 @@ Item {
                 tooltipText: "What the keyboard does"
                 bordered: true
                 foreground: Qt.darker(Color.foreground, 1.4)
-                fontFamily: Style.font.family
-                fontSize: Style.font.caption
+                fontFamily: root.contentFontFamily
+                fontSize: root.contentFontSize(Style.font.caption)
                 onClicked: root.showHelp = !root.showHelp
               }
 
@@ -1328,8 +1340,8 @@ Item {
                 tooltipText: "Mark this conversation read"
                 bordered: true
                 foreground: Color.foreground
-                fontFamily: Style.font.family
-                fontSize: Style.font.caption
+                fontFamily: root.contentFontFamily
+                fontSize: root.contentFontSize(Style.font.caption)
                 onClicked: service.markCurrentRead()
               }
 
@@ -1347,8 +1359,8 @@ Item {
                 selected: service.unreadOnly
                 bordered: true
                 foreground: service.unreadOnly ? Color.accent : Color.foreground
-                fontFamily: Style.font.family
-                fontSize: Style.font.caption
+                fontFamily: root.contentFontFamily
+                fontSize: root.contentFontSize(Style.font.caption)
                 onClicked: service.unreadOnly = !service.unreadOnly
               }
 
@@ -1369,8 +1381,8 @@ Item {
                 tooltipText: "Any channel or person — n, or Ctrl-k"
                 bordered: true
                 foreground: Color.accent
-                fontFamily: Style.font.family
-                fontSize: Style.font.caption
+                fontFamily: root.contentFontFamily
+                fontSize: root.contentFontSize(Style.font.caption)
                 onClicked: root.openSwitcher()
               }
 
@@ -1403,8 +1415,8 @@ Item {
               textFormat: Text.PlainText
               wrapMode: Text.WordWrap
               color: Qt.darker(Color.foreground, 1.4)
-              font.family: Style.font.family
-              font.pixelSize: Style.font.body
+              font.family: root.contentFontFamily
+              font.pixelSize: root.contentFontSize(Style.font.body)
             }
 
             Text {
@@ -1415,8 +1427,8 @@ Item {
               textFormat: Text.PlainText
               wrapMode: Text.WordWrap
               color: Qt.darker(Color.foreground, 1.4)
-              font.family: Style.font.family
-              font.pixelSize: Style.font.body
+              font.family: root.contentFontFamily
+              font.pixelSize: root.contentFontSize(Style.font.body)
             }
 
             // Signing in, which for Slack is a token and not a flow: Slack
@@ -1440,8 +1452,8 @@ Item {
                 textFormat: Text.PlainText
                 wrapMode: Text.WordWrap
                 color: Color.urgent
-                font.family: Style.font.family
-                font.pixelSize: Style.font.body
+                font.family: root.contentFontFamily
+                font.pixelSize: root.contentFontSize(Style.font.body)
               }
 
               Text {
@@ -1451,8 +1463,8 @@ Item {
                 textFormat: Text.PlainText
                 wrapMode: Text.WordWrap
                 color: Qt.darker(Color.foreground, 1.4)
-                font.family: Style.font.family
-                font.pixelSize: Style.font.body
+                font.family: root.contentFontFamily
+                font.pixelSize: root.contentFontSize(Style.font.body)
               }
 
               Row {
@@ -1464,8 +1476,8 @@ Item {
                   text: "Sign in with Slack"
                   bordered: true
                   foreground: Color.accent
-                  fontFamily: Style.font.family
-                  fontSize: Style.font.caption
+                  fontFamily: root.contentFontFamily
+                  fontSize: root.contentFontSize(Style.font.caption)
                   onClicked: service.signInWithBrowser()
                 }
               }
@@ -1498,8 +1510,8 @@ Item {
                     text: "Waiting for Slack in your browser…"
                     textFormat: Text.PlainText
                     color: Color.foreground
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.body
+                    font.family: root.contentFontFamily
+                    font.pixelSize: root.contentFontSize(Style.font.body)
                   }
                 }
 
@@ -1510,16 +1522,16 @@ Item {
                   textFormat: Text.PlainText
                   wrapMode: Text.WordWrap
                   color: Qt.darker(Color.foreground, 1.4)
-                  font.family: Style.font.family
-                  font.pixelSize: Style.font.caption
+                  font.family: root.contentFontFamily
+                  font.pixelSize: root.contentFontSize(Style.font.caption)
                 }
 
                 Button {
                   text: "Cancel"
                   bordered: true
                   foreground: Color.foreground
-                  fontFamily: Style.font.family
-                  fontSize: Style.font.caption
+                  fontFamily: root.contentFontFamily
+                  fontSize: root.contentFontSize(Style.font.caption)
                   onClicked: service.cancelBrowserSignIn()
                 }
               }
@@ -1535,8 +1547,8 @@ Item {
                 textFormat: Text.PlainText
                 wrapMode: Text.WordWrap
                 color: Qt.darker(Color.foreground, 1.4)
-                font.family: Style.font.family
-                font.pixelSize: Style.font.body
+                font.family: root.contentFontFamily
+                font.pixelSize: root.contentFontSize(Style.font.body)
               }
 
               TextField {
@@ -1546,6 +1558,8 @@ Item {
                 password: true
                 foreground: Color.foreground
                 accent: Color.accent
+                font.family: root.contentFontFamily
+                font.pixelSize: root.contentFontSize(Style.font.body)
                 Keys.onPressed: function(event) {
                   if (event.key !== Qt.Key_Return && event.key !== Qt.Key_Enter) return
                   service.signIn(tokenBox.text)
@@ -1562,8 +1576,8 @@ Item {
                   text: service.signingIn ? "Checking…" : "Sign in"
                   bordered: true
                   foreground: Color.accent
-                  fontFamily: Style.font.family
-                  fontSize: Style.font.caption
+                  fontFamily: root.contentFontFamily
+                  fontSize: root.contentFontSize(Style.font.caption)
                   onClicked: {
                     service.signIn(tokenBox.text)
                     // The field is emptied the moment the helper has it. A
@@ -1577,8 +1591,8 @@ Item {
                   text: "Open api.slack.com/apps"
                   bordered: true
                   foreground: Color.foreground
-                  fontFamily: Style.font.family
-                  fontSize: Style.font.caption
+                  fontFamily: root.contentFontFamily
+                  fontSize: root.contentFontSize(Style.font.caption)
                   onClicked: service.openUrl("https://api.slack.com/apps")
                 }
               }
@@ -1590,8 +1604,8 @@ Item {
                 textFormat: Text.PlainText
                 wrapMode: Text.WordWrap
                 color: service.signInError !== "" ? Color.urgent : Qt.darker(Color.foreground, 1.4)
-                font.family: Style.font.family
-                font.pixelSize: Style.font.caption
+                font.family: root.contentFontFamily
+                font.pixelSize: root.contentFontSize(Style.font.caption)
               }
             }
           }
@@ -1669,6 +1683,8 @@ Item {
                 placeholderText: "Filter these conversations"
                 foreground: Color.foreground
                 accent: Color.accent
+                font.family: root.contentFontFamily
+                font.pixelSize: root.contentFontSize(Style.font.body)
                 text: service.filterText
                 onTextChanged: if (text !== service.filterText) service.filterText = text
                 Keys.onPressed: function(event) {
@@ -1697,6 +1713,7 @@ Item {
                   width: parent.width - root.listGutter
                   rows: 8
                   fg: Color.foreground
+                  fontScale: root.contentFontScale
                 }
               }
 
@@ -1718,7 +1735,8 @@ Item {
                   selectedKey: service.openConversation ? String(service.openConversation.key) : ""
                   fg: Color.foreground
                   accent: Color.accent
-                  fontFamily: Style.font.family
+                  fontFamily: root.contentFontFamily
+                  fontScale: root.contentFontScale
                   onCursorMoved: function(itemY, itemHeight) {
                     root.ensureVisible(sidebarScroll, itemY, itemHeight)
                   }
@@ -1749,8 +1767,8 @@ Item {
                   ? "Nothing here yet" : "Pick a conversation, or press n to jump to one"
                 textFormat: Text.PlainText
                 color: Qt.darker(Color.foreground, 1.8)
-                font.family: Style.font.family
-                font.pixelSize: Style.font.body
+                font.family: root.contentFontFamily
+                font.pixelSize: root.contentFontSize(Style.font.body)
               }
 
               Column {
@@ -1793,8 +1811,8 @@ Item {
                           ? String(service.openConversation.title || "the conversation") : "")
                     textFormat: Text.PlainText
                     color: Color.accent
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.caption
+                    font.family: root.contentFontFamily
+                    font.pixelSize: root.contentFontSize(Style.font.caption)
                   }
 
                   MouseArea {
@@ -1811,8 +1829,8 @@ Item {
                   textFormat: Text.PlainText
                   wrapMode: Text.WordWrap
                   color: Color.urgent
-                  font.family: Style.font.family
-                  font.pixelSize: Style.font.caption
+                  font.family: root.contentFontFamily
+                  font.pixelSize: root.contentFontSize(Style.font.caption)
                 }
 
                 LoadingRows {
@@ -1820,6 +1838,7 @@ Item {
                   visible: service.messagesLoading && service.messages.length === 0
                   rows: 5
                   fg: Color.foreground
+                  fontScale: root.contentFontScale
                 }
 
                 // The channel's canvas, in the transcript's own space rather
@@ -1854,8 +1873,8 @@ Item {
                         textFormat: Text.PlainText
                         elide: Text.ElideRight
                         color: Color.foreground
-                        font.family: Style.font.family
-                        font.pixelSize: Style.font.body
+                        font.family: root.contentFontFamily
+                        font.pixelSize: root.contentFontSize(Style.font.body)
                         font.bold: true
                       }
 
@@ -1865,8 +1884,8 @@ Item {
                         text: service.canvas ? Model.whenLabel(service.canvas.updated) : ""
                         textFormat: Text.PlainText
                         color: Qt.darker(Color.foreground, 1.5)
-                        font.family: Style.font.family
-                        font.pixelSize: Style.font.caption
+                        font.family: root.contentFontFamily
+                        font.pixelSize: root.contentFontSize(Style.font.caption)
                       }
                     }
 
@@ -1880,8 +1899,8 @@ Item {
                       textFormat: Text.PlainText
                       wrapMode: Text.WordWrap
                       color: Qt.darker(Color.foreground, 1.4)
-                      font.family: Style.font.family
-                      font.pixelSize: Style.font.caption
+                      font.family: root.contentFontFamily
+                      font.pixelSize: root.contentFontSize(Style.font.caption)
                     }
 
                     LoadingRows {
@@ -1889,6 +1908,7 @@ Item {
                       visible: service.canvasLoading && !service.canvas
                       rows: 4
                       fg: Color.foreground
+                      fontScale: root.contentFontScale
                     }
 
                     Text {
@@ -1898,8 +1918,8 @@ Item {
                       textFormat: Text.PlainText
                       wrapMode: Text.WordWrap
                       color: Color.urgent
-                      font.family: Style.font.family
-                      font.pixelSize: Style.font.caption
+                      font.family: root.contentFontFamily
+                      font.pixelSize: root.contentFontSize(Style.font.caption)
                     }
 
                     SelectableText {
@@ -1927,8 +1947,8 @@ Item {
                         cursorShape: Qt.PointingHandCursor
                       }
                       color: Color.foreground
-                      font.family: Style.font.family
-                      font.pixelSize: Style.font.bodySmall
+                      font.family: root.contentFontFamily
+                      font.pixelSize: root.contentFontSize(Style.font.bodySmall)
                     }
 
                     Text {
@@ -1938,8 +1958,8 @@ Item {
                       textFormat: Text.PlainText
                       wrapMode: Text.WordWrap
                       color: Qt.darker(Color.foreground, 1.5)
-                      font.family: Style.font.family
-                      font.pixelSize: Style.font.caption
+                      font.family: root.contentFontFamily
+                      font.pixelSize: root.contentFontSize(Style.font.caption)
                     }
                   }
                 }
@@ -2029,8 +2049,8 @@ Item {
                         textFormat: Text.PlainText
                         elide: Text.ElideRight
                         color: Color.foreground
-                        font.family: Style.font.family
-                        font.pixelSize: Style.font.body
+                        font.family: root.contentFontFamily
+                        font.pixelSize: root.contentFontSize(Style.font.body)
                         font.bold: true
                       }
 
@@ -2044,8 +2064,8 @@ Item {
                           : "rewriting all of it, in Markdown"
                         textFormat: Text.PlainText
                         color: Qt.darker(Color.foreground, 1.5)
-                        font.family: Style.font.family
-                        font.pixelSize: Style.font.caption
+                        font.family: root.contentFontFamily
+                        font.pixelSize: root.contentFontSize(Style.font.caption)
                       }
                     }
 
@@ -2059,8 +2079,8 @@ Item {
                         tooltipText: "**bold**  (Ctrl+B)"
                         bordered: true
                         foreground: Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: canvasEditor.around("**", "**")
                       }
 
@@ -2069,8 +2089,8 @@ Item {
                         tooltipText: "*italic*  (Ctrl+I)"
                         bordered: true
                         foreground: Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: canvasEditor.around("*", "*")
                       }
 
@@ -2079,8 +2099,8 @@ Item {
                         tooltipText: "`code`"
                         bordered: true
                         foreground: Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: canvasEditor.around("`", "`")
                       }
 
@@ -2089,8 +2109,8 @@ Item {
                         tooltipText: "[words](https://…)  (Ctrl+K)"
                         bordered: true
                         foreground: Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: canvasEditor.around("[", "](https://)")
                       }
 
@@ -2099,8 +2119,8 @@ Item {
                         tooltipText: "## a heading"
                         bordered: true
                         foreground: Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: canvasEditor.lead("## ")
                       }
 
@@ -2109,8 +2129,8 @@ Item {
                         tooltipText: "- an item"
                         bordered: true
                         foreground: Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: canvasEditor.lead("- ")
                       }
 
@@ -2119,8 +2139,8 @@ Item {
                         tooltipText: "- [ ] something to do"
                         bordered: true
                         foreground: Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: canvasEditor.lead("- [ ] ")
                       }
 
@@ -2129,8 +2149,8 @@ Item {
                         tooltipText: "> quoted"
                         bordered: true
                         foreground: Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: canvasEditor.lead("> ")
                       }
 
@@ -2142,8 +2162,8 @@ Item {
                         selected: root.canvasPreview
                         bordered: true
                         foreground: root.canvasPreview ? Color.accent : Color.foreground
-                        fontFamily: Style.font.family
-                        fontSize: Style.font.caption
+                        fontFamily: root.contentFontFamily
+                        fontSize: root.contentFontSize(Style.font.caption)
                         onClicked: root.canvasPreview = !root.canvasPreview
                       }
                     }
@@ -2188,8 +2208,8 @@ Item {
                             wrapMode: TextArea.Wrap
                             color: Color.foreground
                             placeholderTextColor: Qt.darker(Color.foreground, 1.5)
-                            font.family: Style.font.family
-                            font.pixelSize: Style.font.bodySmall
+                            font.family: root.contentFontFamily
+                            font.pixelSize: root.contentFontSize(Style.font.bodySmall)
                             background: null
                             text: service.canvasDraft
                             onTextChanged: if (text !== service.canvasDraft)
@@ -2254,8 +2274,8 @@ Item {
                             cursorShape: Qt.PointingHandCursor
                           }
                           color: Color.foreground
-                          font.family: Style.font.family
-                          font.pixelSize: Style.font.bodySmall
+                          font.family: root.contentFontFamily
+                          font.pixelSize: root.contentFontSize(Style.font.bodySmall)
                         }
                       }
                     }
@@ -2277,8 +2297,8 @@ Item {
                     tooltipText: "Write in this canvas"
                     bordered: true
                     foreground: Color.foreground
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.editCanvas(false)
                   }
 
@@ -2292,8 +2312,8 @@ Item {
                                + "leaving the rest of it alone"
                     bordered: true
                     foreground: Color.foreground
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.editCanvas(true)
                   }
 
@@ -2307,8 +2327,8 @@ Item {
                       : "Replace the canvas with what is in the box  (Shift+Enter)"
                     bordered: true
                     foreground: Color.accent
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.saveCanvas()
                   }
 
@@ -2319,8 +2339,8 @@ Item {
                     tooltipText: "Leave the canvas as it is, and lose what is in the box"
                     bordered: true
                     foreground: Color.foreground
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.forgetCanvasEdit()
                   }
 
@@ -2331,8 +2351,8 @@ Item {
                     tooltipText: "Read this canvas from Slack again"
                     bordered: true
                     foreground: Color.foreground
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.loadCanvas()
                   }
 
@@ -2347,8 +2367,8 @@ Item {
                                + "cannot write can be edited"
                     bordered: true
                     foreground: Color.foreground
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.openUrl(String(service.canvas.permalink))
                   }
 
@@ -2365,8 +2385,8 @@ Item {
                     maximumLineCount: 2
                     elide: Text.ElideRight
                     color: Color.urgent
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.caption
+                    font.family: root.contentFontFamily
+                    font.pixelSize: root.contentFontSize(Style.font.caption)
                   }
                 }
 
@@ -2460,8 +2480,8 @@ Item {
                             text: String(group.modelData.day || "")
                             textFormat: Text.PlainText
                             color: Qt.darker(Color.foreground, 1.6)
-                            font.family: Style.font.family
-                            font.pixelSize: Style.font.caption
+                            font.family: root.contentFontFamily
+                            font.pixelSize: root.contentFontSize(Style.font.caption)
                           }
                         }
 
@@ -2472,12 +2492,13 @@ Item {
                           Avatar {
                             id: groupFace
                             visible: service.wantAvatars && !group.modelData.system
-                            size: Math.max(Style.space(24), Style.font.body * 1.9)
+                            size: Math.max(Style.space(24), root.contentFontSize(Style.font.body) * 1.9)
                             path: String(group.modelData.avatar || "")
                             name: String(group.modelData.from || "")
                             fg: Color.foreground
                             accent: Color.accent
-                            fontFamily: Style.font.family
+                            fontFamily: root.contentFontFamily
+                            fontScale: root.contentFontScale
                           }
 
                           Column {
@@ -2494,8 +2515,8 @@ Item {
                               elide: Text.ElideRight
                               color: group.modelData.mine ? Color.accent
                                                           : Qt.darker(Color.foreground, 1.4)
-                              font.family: Style.font.family
-                              font.pixelSize: Style.font.caption
+                              font.family: root.contentFontFamily
+                              font.pixelSize: root.contentFontSize(Style.font.caption)
                               font.bold: true
                             }
 
@@ -2580,8 +2601,8 @@ Item {
                                     }
                                     textFormat: linked ? TextEdit.RichText : TextEdit.PlainText
                                     color: Color.foreground
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.bodySmall
+                                    font.family: root.contentFontFamily
+                                    font.pixelSize: root.contentFontSize(Style.font.bodySmall)
                                   }
 
                                   // Answer in a thread. The chip below opens a
@@ -2624,8 +2645,8 @@ Item {
                                       text: "↩"
                                       textFormat: Text.PlainText
                                       color: Qt.darker(Color.foreground, 1.4)
-                                      font.family: Style.font.family
-                                      font.pixelSize: Style.font.caption
+                                      font.family: root.contentFontFamily
+                                      font.pixelSize: root.contentFontSize(Style.font.caption)
                                     }
 
                                     MouseArea {
@@ -2681,8 +2702,8 @@ Item {
                                       text: "+"
                                       textFormat: Text.PlainText
                                       color: Qt.darker(Color.foreground, 1.4)
-                                      font.family: Style.font.family
-                                      font.pixelSize: Style.font.caption
+                                      font.family: root.contentFontFamily
+                                      font.pixelSize: root.contentFontSize(Style.font.caption)
                                     }
 
                                     MouseArea {
@@ -2712,7 +2733,8 @@ Item {
                                   busy: service.reacting
                                   fg: Color.foreground
                                   accent: Color.accent
-                                  fontFamily: Style.font.family
+                                  fontFamily: root.contentFontFamily
+                                  fontScale: root.contentFontScale
                                   onToggled: function(name) {
                                     root.pickingMessageId = ""
                                     service.react(line.modelData.ts, name,
@@ -2750,8 +2772,8 @@ Item {
                                                             line.modelData.threadUnread) + "  ›"
                                     textFormat: Text.PlainText
                                     color: Color.accent
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.caption
+                                    font.family: root.contentFontFamily
+                                    font.pixelSize: root.contentFontSize(Style.font.caption)
                                     font.bold: parent.threadUnread
                                   }
 
@@ -2781,6 +2803,8 @@ Item {
                                     intrinsicHeight: Number(modelData.height || 0)
                                     account: service.alias
                                     pluginDir: root.pluginDir
+                                    fontFamily: root.contentFontFamily
+                                    fontScale: root.contentFontScale
                                     maxWidth: Math.min(Style.space(320),
                                                        columns.readerWidth - Style.spacing.xxl)
                                   }
@@ -2821,8 +2845,8 @@ Item {
                                         text: ""
                                         textFormat: Text.PlainText
                                         color: Qt.darker(Color.foreground, 1.4)
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.caption
+                                        font.family: root.contentFontFamily
+                                        font.pixelSize: root.contentFontSize(Style.font.caption)
                                       }
 
                                       Text {
@@ -2831,8 +2855,8 @@ Item {
                                         textFormat: Text.PlainText
                                         elide: Text.ElideRight
                                         color: Color.foreground
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.caption
+                                        font.family: root.contentFontFamily
+                                        font.pixelSize: root.contentFontSize(Style.font.caption)
                                       }
 
                                       Text {
@@ -2840,8 +2864,8 @@ Item {
                                         text: Model.fileLabel(modelData)
                                         textFormat: Text.PlainText
                                         color: Qt.darker(Color.foreground, 1.6)
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.caption
+                                        font.family: root.contentFontFamily
+                                        font.pixelSize: root.contentFontSize(Style.font.caption)
                                       }
                                     }
 
@@ -2909,8 +2933,8 @@ Item {
                           // the accent is the only warning the row can carry.
                           color: mentionRow.modelData.broadcast
                             ? Color.accent : Color.foreground
-                          font.family: Style.font.family
-                          font.pixelSize: Style.font.caption
+                          font.family: root.contentFontFamily
+                          font.pixelSize: root.contentFontSize(Style.font.caption)
                           font.bold: true
                         }
 
@@ -2920,8 +2944,8 @@ Item {
                           textFormat: Text.PlainText
                           elide: Text.ElideRight
                           color: Qt.darker(Color.foreground, 1.4)
-                          font.family: Style.font.family
-                          font.pixelSize: Style.font.caption
+                          font.family: root.contentFontFamily
+                          font.pixelSize: root.contentFontSize(Style.font.caption)
                           width: Math.min(implicitWidth, mentionLine.width * 0.45)
                         }
 
@@ -2932,8 +2956,8 @@ Item {
                           textFormat: Text.PlainText
                           elide: Text.ElideRight
                           color: Qt.darker(Color.foreground, 1.8)
-                          font.family: Style.font.family
-                          font.pixelSize: Style.font.caption
+                          font.family: root.contentFontFamily
+                          font.pixelSize: root.contentFontSize(Style.font.caption)
                           width: Math.max(0, mentionLine.width - x)
                         }
                       }
@@ -2979,8 +3003,8 @@ Item {
                       enabled: service.canPost
                       color: Color.foreground
                       placeholderTextColor: Qt.darker(Color.foreground, 1.5)
-                      font.family: Style.font.family
-                      font.pixelSize: Style.font.body
+                      font.family: root.contentFontFamily
+                      font.pixelSize: root.contentFontSize(Style.font.body)
                       background: null
                       text: service.draft
                       onTextChanged: {
@@ -3058,8 +3082,8 @@ Item {
                     text: service.sending ? "Sending…" : (service.inThread ? "Reply" : "Send")
                     bordered: true
                     foreground: Color.accent
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.send()
                   }
 
@@ -3075,8 +3099,8 @@ Item {
                     bordered: true
                     foreground: service.alsoToChannel ? Color.accent
                                                       : Qt.darker(Color.foreground, 1.4)
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.alsoToChannel = !service.alsoToChannel
                   }
 
@@ -3089,8 +3113,8 @@ Item {
                     tooltipText: "Send a file into this conversation. Anything typed in the box goes with it as its comment, and a file dropped on the window does the same."
                     bordered: true
                     foreground: Color.foreground
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: attachDialog.open()
                   }
 
@@ -3100,8 +3124,8 @@ Item {
                     keyText: "r"
                     bordered: true
                     foreground: Color.foreground
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: service.reloadConversation(true)
                   }
 
@@ -3115,8 +3139,8 @@ Item {
                     tooltipText: "Open your coding agent on this conversation"
                     bordered: true
                     foreground: Color.foreground
-                    fontFamily: Style.font.family
-                    fontSize: Style.font.caption
+                    fontFamily: root.contentFontFamily
+                    fontSize: root.contentFontSize(Style.font.caption)
                     onClicked: root.askAgent()
                   }
 
@@ -3134,8 +3158,8 @@ Item {
                     color: (service.sendError === "" && service.uploadError === ""
                             && service.reactError === "" && service.markReadError === "")
                            ? Qt.darker(Color.foreground, 1.4) : Color.urgent
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.caption
+                    font.family: root.contentFontFamily
+                    font.pixelSize: root.contentFontSize(Style.font.caption)
                   }
                 }
               }

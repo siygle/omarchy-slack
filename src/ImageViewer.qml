@@ -29,6 +29,9 @@ Item {
   property color fg: Color.foreground
   property color accent: Color.accent
   property string fontFamily: Style.font.family
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
 
   signal closeRequested()
 
@@ -129,7 +132,7 @@ Item {
         elide: Text.ElideRight
         color: Qt.darker(root.fg, 1.4)
         font.family: root.fontFamily
-        font.pixelSize: Style.font.caption
+        font.pixelSize: root.scaledFont(Style.font.caption)
       }
 
       // The whole picture, fitted rather than cropped, and never blown up past
@@ -157,7 +160,7 @@ Item {
           enabled: !copyProc.running && root.path !== ""
           foreground: root.accent
           fontFamily: root.fontFamily
-          fontSize: Style.font.caption
+          fontSize: root.scaledFont(Style.font.caption)
           onClicked: root.save()
         }
 
@@ -167,7 +170,7 @@ Item {
           bordered: true
           foreground: root.fg
           fontFamily: root.fontFamily
-          fontSize: Style.font.caption
+          fontSize: root.scaledFont(Style.font.caption)
           onClicked: root.openExternally()
         }
 
@@ -176,7 +179,7 @@ Item {
           bordered: true
           foreground: root.fg
           fontFamily: root.fontFamily
-          fontSize: Style.font.caption
+          fontSize: root.scaledFont(Style.font.caption)
           onClicked: root.closeRequested()
         }
 
@@ -188,7 +191,7 @@ Item {
           elide: Text.ElideMiddle
           color: root.problem !== "" ? Color.urgent : Qt.darker(root.fg, 1.4)
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
 
         // Keeps the outcome and the key hint from running together.
@@ -200,7 +203,7 @@ Item {
           textFormat: Text.PlainText
           color: Qt.darker(root.fg, 1.9)
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
       }
     }

@@ -41,7 +41,9 @@
       "presence": true,
       "notify": true,
       "agentHandover": true,
-      "density": "cosy"
+      "density": "cosy",
+      "fontFamily": "",
+      "fontScale": 100
     },
     "schema": [
       {
@@ -89,6 +91,22 @@
           "roomy",
           "spacious"
         ]
+      },
+      {
+        "key": "fontFamily",
+        "type": "string",
+        "label": "Font family",
+        "description": "Font used throughout the Slack window and unread dropdown. Empty follows the Omarchy theme."
+      },
+      {
+        "key": "fontScale",
+        "type": "integer",
+        "label": "Font size (%)",
+        "description": "Scales the Omarchy theme's type sizes while preserving the hierarchy between captions, messages and headings.",
+        "min": 75,
+        "max": 200,
+        "step": 5,
+        "defaultValue": 100
       },
       {
         "key": "avatars",

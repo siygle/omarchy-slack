@@ -31,6 +31,9 @@ Flow {
   property color fg: Color.foreground
   property color accent: Color.accent
   property string fontFamily: Style.font.family
+  property real fontScale: 1.0
+
+  function scaledFont(themeSize) { return Math.max(1, Math.round(themeSize * fontScale)) }
 
   // Open only while somebody is choosing, so a transcript is not a wall of
   // identical emoji rows. Driven from the message row: at most one picker is
@@ -108,7 +111,7 @@ Flow {
           textFormat: Text.PlainText
           color: root.fg
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
 
         Text {
@@ -118,7 +121,7 @@ Flow {
           textFormat: Text.PlainText
           color: parent.parent.mine ? root.accent : Qt.darker(root.fg, 1.4)
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
       }
 
@@ -166,7 +169,7 @@ Flow {
           textFormat: Text.PlainText
           color: Qt.darker(root.fg, 1.5)
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
 
         Text {
@@ -174,7 +177,7 @@ Flow {
           textFormat: Text.PlainText
           color: root.fg
           font.family: root.fontFamily
-          font.pixelSize: Style.font.caption
+          font.pixelSize: root.scaledFont(Style.font.caption)
         }
       }
 
